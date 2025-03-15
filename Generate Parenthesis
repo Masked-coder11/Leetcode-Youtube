@@ -1,0 +1,19 @@
+class Solution {
+public:
+    void helper(string curr, int open, int closed, int n, vector<string>&ans){
+        if(curr.length()==2*n){
+            ans.push_back(curr);
+            return;
+        }
+        if(open<n) helper(curr+'(', open+1, closed, n, ans);
+        if(open>closed) helper(curr+')', open, closed+1, n, ans);
+
+        return;
+    }
+
+    vector<string> generateParenthesis(int n) {
+        vector<string>ans;
+        helper("", 0, 0, n, ans);
+        return ans;
+    }
+};

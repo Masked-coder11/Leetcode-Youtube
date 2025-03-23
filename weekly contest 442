@@ -1,0 +1,108 @@
+class Solution {
+public:
+    int maxContainers(int n, int w, int maxWeight) {
+        int totalCells = n*n;
+        int weight = totalCells*w;
+
+        int allowedWeight = min(weight, maxWeight);
+
+        return allowedWeight/w;
+        
+    }
+};
+
+class Solution {
+public:
+    int intersect(vector<int>&a, vector<int>&b){
+        int i=0, j=0, m=a.size();
+        int ans=0;
+        while(i<m && j<m){
+            if(a[i]==b[j]){
+                ans++;
+                i++;j++;
+                while(i<m && a[i]==a[i-1]) i++;
+                while(j<m && b[j]==b[j-1]) j++;
+            }
+            else if(a[i]<b[j]){
+                i++;
+                while(i<m && a[i]==a[i-1]) i++;
+            }
+            else{
+                j++;
+                while(j<m && b[j]==b[j-1]) j++;
+            }
+        }
+        return ans;
+    }
+
+    void bfs(int start, vector<int>&vis, vector<int>adj[]){
+        vis[start]=1;
+        queue<int>q;
+        q.push(start);
+        while(!q.empty()){
+            int node=q.front();
+            q.pop();
+            for(auto it:adj[node]){
+                if(!vis[it]){
+                    vis[it]=1;
+                    q.push(it);
+                }
+            }
+        }
+        return ;
+
+    }
+
+    int numberOfComponents(vector<vector<int>>& properties, int k) {
+        int n=properties.size();
+        for(int i=0;i<n;i++){
+            sort(properties[i].begin(), properties[i].end());
+        }
+        vector<int>adj[n];
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<n;j++){
+                int val = intersect(properties[i], properties[j]);
+                if(val>=k){
+                    adj[i].push_back(j);
+                    adj[j].push_back(i);
+                }
+            }
+        }
+        int ans=0;
+        vector<int>vis(n,0);
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                ans++;
+                bfs(i, vis, adj);
+            }
+        }
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    long long minTime(vector<int>& skill, vector<int>& mana) {
+        int n=skill.size(), m=mana.size();
+        vector<long long>lastPotion(n,0);
+        for(int i=0;i<m;i++){
+            vector<long long>prefix(n,0);
+            prefix[0]=skill[0]*mana[i];
+            for(int j=1;j<n;j++){
+                prefix[j]= prefix[j-1]+skill[j]*mana[i];
+            }
+            long long startTime=lastPotion[0];
+            for(int j=1;j<n;j++){
+                long long newTime= startTime+prefix[j-1];
+                if(newTime < lastPotion[j]){
+                    startTime+=lastPotion[j]- newTime;
+                }
+            }
+            for(int j=0;j<n;j++){
+                lastPotion[j]=startTime + prefix[j];
+            }
+        }
+        return lastPotion[n-1];
+    }
+};
+

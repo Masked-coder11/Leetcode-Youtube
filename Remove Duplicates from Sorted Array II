@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int n=nums.size(), i=0, start=0;
+        while(i<n){
+            int curr=nums[i], j=i;
+            while(j<n && nums[j]==curr){
+                j++;
+            }
+            int allowed= min(2, j-i);
+            for(int x=0;x<allowed;x++){
+                nums[start++]=curr;
+            }
+            i=j;
+        }
+        return start;
+    }
+};

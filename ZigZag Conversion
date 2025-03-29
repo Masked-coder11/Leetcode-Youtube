@@ -1,0 +1,39 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        int n=s.length();
+        if(numRows==1 || n<=numRows) return s;
+
+        string ans="";
+
+        // for first row
+        int curr=0;
+        while(curr<n){
+            ans+=s[curr];
+            curr+=(numRows-1)*2;
+        }
+
+        // for 2nd to n-1 row
+        for(int i=1;i<=numRows-2;i++){
+            curr=i;
+            while(curr<n){
+                ans+=s[curr];
+                curr+=(numRows-(i+1))*2;
+                if(curr<n){
+                    ans+=s[curr];
+                }
+                curr+=i*2;
+            }
+        }
+
+        // for last row
+        curr=numRows-1;
+        while(curr<n){
+            ans+=s[curr];
+            curr+=(numRows-1)*2;
+        }
+
+        return ans;
+        
+    }
+};
